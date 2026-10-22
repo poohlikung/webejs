@@ -1,0 +1,54 @@
+<%- include('../partials/head', { title: title }) %>
+
+<h1><%= product.name %></h1>
+<p>ราคา: <%= product.price.toFixed(2) %> บาท</p>
+
+<a
+  class="btn btn-warning"
+  href="/products/<%= product._id %>/edit"
+>
+  แก้ไข
+</a>
+
+<button
+  id="deleteButton"
+  class="btn btn-danger"
+  type="button"
+  data-id="<%= product._id %>"
+>
+  ลบ
+</button>
+
+<a class="btn btn-secondary" href="/products">กลับ</a>
+
+<script>
+  // HTML form ส่ง DELETE ตรง ๆ ไม่ได้ จึงใช้ fetch()
+  const deleteButton = document.querySelector('#deleteButton');
+
+  deleteButton.addEventListener('click', async () => {
+    if (!window.confirm('ยืนยันการลบสินค้านี้?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `/products/${deleteButton.dataset.id}`,
+        { method: 'DELETE' }
+      );
+
+      if (!response.ok) {
+        throw new Error('ลบสินค้าไม่สำเร็จ');
+      }
+
+      const result = await response.json();
+
+      // fetch ไม่เปลี่ยนหน้าหลักเอง จึงสั่ง browser ไปหน้ารายการ
+      window.location.href = result.redirect;
+    } catch (error) {
+      window.alert(error.message);
+    }
+  });
+</script>
+
+</body>
+</html>

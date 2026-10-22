@@ -1,0 +1,25 @@
+<%- include('../partials/head', { title: title }) %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>รายการสินค้า</h1>
+  <a class="btn btn-primary" href="/products/new">เพิ่มสินค้า</a>
+</div>
+
+<%# ถ้าไม่มีข้อมูล ให้แสดงข้อความแทนรายการ %>
+<% if (products.length === 0) { %>
+  <p>ยังไม่มีสินค้า</p>
+<% } else { %>
+  <ul class="list-group">
+    <% products.forEach(product => { %>
+      <li class="list-group-item d-flex justify-content-between">
+        <a href="/products/<%= product._id %>">
+          <%= product.name %>
+        </a>
+        <span><%= product.price.toFixed(2) %> บาท</span>
+      </li>
+    <% }) %>
+  </ul>
+<% } %>
+
+</body>
+</html>
